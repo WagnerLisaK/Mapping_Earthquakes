@@ -40,6 +40,13 @@ let map = L.map('mapid', {
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps,overlays).addTo(map);
 
+// Create a style for the lines.
+let myStyle = {
+    color: "#4169E1",
+    weight: 2,
+    fillColor: "#FFFF00"
+};
+
 // Retrieve the earthquake GeoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
     // This function returns the style data for each of the earthquakes we plot on
@@ -97,31 +104,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
         onEachFeature: function(feature, layer) {
         layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
         }
-
-      let legend = L.control({position: "bottomright"});
-
-      legend.onAdd = function() {
-        let div = L.DomUtil.create("div", "info legend");
-        const magnitudes = [0, 1, 2, 3, 4, 5];
-        const colors = [
-            "#98ee00",
-            "#d4ee00",
-            "#eecc00",
-            "#ee9c00",
-            "#ea822c",
-            "#ea2c2c"
-        ];
-      // Looping through our intervals to generate a label with a colored square for each interval.
-        for (var i = 0; i < magnitudes.length; i++) {
-            console.log(colors[i]);
-            div.innerHTML +=
-                "<i style='background: " + colors[i] + "'></i> " +
-                magnitudes[i] + (magnitudes[i + 1] ? "&ndash;" + magnitudes[i + 1] + "<br>" : "+");
-        }
-        return div;
-      };
-      legend.addTo(map);
   }).addTo(earthquakes);
 })
-// Then we add our earthquake tile layer to the map.
+// Then we add our 'graymap' tile layer to the map.
 earthquakes.addTo(map);
